@@ -1,0 +1,38 @@
+import tkinter as tk
+from tkinter import filedialog, messagebox
+from Ternary import read_data, plot_ternary_with_icons
+
+
+def select_file():
+    filepath = filedialog.askopenfilename(title='选择数据文件')
+    if filepath:
+        path_var.set(filepath)
+
+
+def plot():
+    filepath = path_var.get()
+    if not filepath:
+        messagebox.showwarning('提示', '请先选择数据文件')
+        return
+    try:
+        data = read_data(filepath)
+        plot_ternary_with_icons(data)
+    except Exception as e:
+        messagebox.showerror('错误', str(e))
+
+
+root = tk.Tk()
+root.title('三元图绘制工具')
+
+path_var = tk.StringVar()
+
+entry = tk.Entry(root, textvariable=path_var, width=40)
+entry.grid(row=0, column=0, padx=5, pady=5)
+
+btn_select = tk.Button(root, text='选择数据文件', command=select_file)
+btn_select.grid(row=0, column=1, padx=5, pady=5)
+
+btn_plot = tk.Button(root, text='绘制三元图', command=plot)
+btn_plot.grid(row=1, column=0, columnspan=2, pady=10)
+
+root.mainloop()
